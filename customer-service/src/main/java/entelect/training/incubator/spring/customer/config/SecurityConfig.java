@@ -24,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     //        auth.jdbcAuthentication().dataSource(securityDataSource);
     //    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("user").password("{noop}the_cake").roles("USER");
@@ -35,8 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable() // !!! Disclaimer: NEVER DISABLE CSRF IN PRODUCTION !!!
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/customers/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.POST, "/customers/**").hasAnyRole("SYSTEM", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/customers").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/customers/**").hasAnyRole("ADMIN")
                 .and()
                 .httpBasic();
     }
