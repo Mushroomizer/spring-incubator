@@ -3,8 +3,8 @@ package entelect.training.incubator.spring.booking.controller;
 
 import entelect.training.incubator.spring.booking.model.Booking;
 import entelect.training.incubator.spring.booking.model.CreateBookingRequest;
-import entelect.training.incubator.spring.booking.rewards.client.gen.CaptureRewardsResponse;
-import entelect.training.incubator.spring.booking.rewards.client.gen.RewardsBalanceResponse;
+import entelect.training.incubator.spring.booking.model.Customer;
+import entelect.training.incubator.spring.booking.model.Flight;
 import entelect.training.incubator.spring.booking.service.BookingService;
 import entelect.training.incubator.spring.booking.service.CustomerClientService;
 import entelect.training.incubator.spring.booking.service.FlightClientService;
@@ -37,18 +37,24 @@ public class BookingController {
 
     @PostMapping("/bookings")
     public ResponseEntity<?> makeBooking(@RequestBody CreateBookingRequest request) {
-        if (!_customerClientService.isCustomerIdValid(request.customerId)) {
+
+        Customer customer = _customerClientService.getCustomerById(request.customerId);
+        if (customer == null || !customer.getId().equals(request.customerId)) {
             LOGGER.info("No customer found with id={}", request.customerId);
             return new ResponseEntity<>("Invalid Customer id", HttpStatus.BAD_REQUEST);
         }
 
-        if (!_flightClientService.isFlightIdValid(request.flightId)) {
+        Flight flight = _flightClientService.getFlightById(request.flightId);
+        if (flight == null || !flight.getId().equals(request.flightId)) {
             LOGGER.info("No flight found with id={}", request.flightId);
             return new ResponseEntity<>("Invalid Flight id", HttpStatus.BAD_REQUEST);
         }
 
         Booking savedBooking = _bookingService.createBooking(new Booking(request.customerId, request.flightId));
         LOGGER.info("Booking created with reference number={}", savedBooking.getId());
+
+        _rewardsClient.updateRewards(customer.getPassportNumber(), BigDecimal.ONE);
+
         return new ResponseEntity<>(savedBooking, HttpStatus.OK);
     }
 
@@ -84,18 +90,4 @@ public class BookingController {
         LOGGER.info("{} Bookings found", bookings.size());
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
-
-    @PostMapping(value = "test")
-    public ResponseEntity<?> test() {
-        try{
-            CaptureRewardsResponse captureRewardsResponse = _rewardsClient.updateRewards("1234", BigDecimal.ONE);
-            return new ResponseEntity<>(captureRewardsResponse.getBalance(), HttpStatus.OK);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-        return ResponseEntity.ok().build();
-    }
-
 }

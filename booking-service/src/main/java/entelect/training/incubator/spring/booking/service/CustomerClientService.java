@@ -18,6 +18,17 @@ public class CustomerClientService {
     @Value("${customer.service.password}")
     private String servicePassword;
 
+    public Customer getCustomerById(Integer customerId){
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(serviceUsername, servicePassword));
+            return restTemplate.getForObject(String.format("%s/customers/%d", customerServiceUrl, customerId), Customer.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean isCustomerIdValid(Integer customerId) {
         try {
             RestTemplate restTemplate = new RestTemplate();
