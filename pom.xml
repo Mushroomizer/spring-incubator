@@ -36,11 +36,10 @@
         <springsecurity.version>5.2.10.RELEASE</springsecurity.version>
         <lombok.version>1.18.20</lombok.version>
         <spring-boot-starter-test.version>2.4.0</spring-boot-starter-test.version>
-        <jaxb.version>2.2.11</jaxb.version>
-        <activation.version>1.1.1</activation.version>
         <hsqldb.version>2.4.0</hsqldb.version>
         <h2.version>1.4.200</h2.version>
         <springdoc.version>1.7.0</springdoc.version>
+        <jax.version>2.3.2</jax.version>
     </properties>
 
     <dependencyManagement>
@@ -81,43 +80,16 @@
                 <scope>runtime</scope>
             </dependency>
 
-            <!-- JAXB -->
-            <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-core</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.activation</groupId>
-                <artifactId>activation</artifactId>
-                <version>${activation.version}</version>
-            </dependency>
-
             <!-- Soap-->
-            <dependency>
-                <groupId>javax.xml.ws</groupId>
-                <artifactId>jaxws-api</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.xml.soap</groupId>
-                <artifactId>javax.xml.soap-api</artifactId>
-                <version>1.4.0</version>
-            </dependency>
             <dependency>
                 <groupId>com.sun.xml.messaging.saaj</groupId>
                 <artifactId>saaj-impl</artifactId>
-                <version>1.5.1</version>
+                <version>${saaj-impl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${jax.version}</version>
             </dependency>
 
             <dependency>
