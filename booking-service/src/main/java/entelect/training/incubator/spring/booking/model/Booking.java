@@ -10,7 +10,7 @@ import java.util.Random;
 @Data
 @NoArgsConstructor
 @Entity
-public class Booking {
+public class Booking{
 
     public Booking(Integer customer_id, Integer flight_id) {
         this.customerId = customer_id;

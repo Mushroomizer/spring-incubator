@@ -50,7 +50,7 @@ public class BookingController {
             return new ResponseEntity<>("Invalid Flight id", HttpStatus.BAD_REQUEST);
         }
 
-        Booking savedBooking = _bookingService.createBooking(new Booking(request.customerId, request.flightId));
+        Booking savedBooking = _bookingService.createBooking(new Booking(request.customerId, request.flightId),customer,flight);
         LOGGER.info("Booking created with reference number={}", savedBooking.getId());
 
         _rewardsClient.updateRewards(customer.getPassportNumber(), BigDecimal.ONE);

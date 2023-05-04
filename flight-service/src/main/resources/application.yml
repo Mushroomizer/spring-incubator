@@ -25,3 +25,4 @@ loyalty:
 springdoc:
   swagger-ui:
     path: swagger
+    use-root-path: true

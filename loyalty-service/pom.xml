@@ -40,12 +40,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Swagger dependencies -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-        </dependency>
-
         <!-- Soap -->
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
