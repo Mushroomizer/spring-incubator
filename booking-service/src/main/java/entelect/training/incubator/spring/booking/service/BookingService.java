@@ -23,11 +23,11 @@ public class BookingService {
         return _bookingRepository.findById(id).orElse(null);
     }
 
-    public Booking getBookingByReferenceNumber(Integer referenceNumber) {
-        return _bookingRepository.findByReference_number(referenceNumber).orElse(null);
+    public Booking getBookingByReferenceNumber(String referenceNumber) {
+        return _bookingRepository.findByReferenceNumber(referenceNumber).orElse(null);
     }
 
     public List<Booking> getBookingsByCustomerId(Integer customerId) {
-        return _bookingRepository.findByCustomerId(customerId).orElse(null);
+        return _bookingRepository.findBookingByCustomerId(customerId).orElse(null);
     }
 }

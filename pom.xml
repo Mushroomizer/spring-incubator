@@ -40,6 +40,7 @@
         <activation.version>1.1.1</activation.version>
         <hsqldb.version>2.4.0</hsqldb.version>
         <h2.version>1.4.200</h2.version>
+        <springdoc.version>1.7.0</springdoc.version>
     </properties>
 
     <dependencyManagement>
@@ -120,6 +121,11 @@
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,10 @@ public class BookingController {
     private static BookingService _bookingService;
 
     public BookingController(BookingService bookingService) {
+
         _bookingService = bookingService;
     }
+
 
     @PostMapping("/bookings")
     public ResponseEntity<?> makeBooking(@RequestBody CreateBookingRequest request) {
@@ -36,34 +39,29 @@ public class BookingController {
     public ResponseEntity<?> getBookingById(@PathVariable Integer id) {
         Booking booking = _bookingService.getBookingById(id);
         if (booking != null) {
-            LOGGER.info("Booking found with reference number={}", booking.getReference_number());
+            LOGGER.info("Booking found with reference number={}", booking.getReferenceNumber());
             return new ResponseEntity<>(booking, HttpStatus.OK);
         }
         LOGGER.info("No booking found with id={}", id);
         return ResponseEntity.notFound().build();
     }
 
-    // Return a list of bookings for a customer
-    @PostMapping("/bookings/search")
-    public ResponseEntity<?> searchBookingByCustomerId(@RequestBody Integer customerId) {
+    @PostMapping(value = "/bookings/search", params = "customerId")
+    public ResponseEntity<?> searchBookingByCustomerId(@RequestParam(value = "customerId", required = false) Integer customerId) {
         List<Booking> bookings = _bookingService.getBookingsByCustomerId(customerId);
-        if (bookings != null) {
-            LOGGER.info("{} Bookings found", bookings.size());
-            return new ResponseEntity<>(bookings, HttpStatus.OK);
-        }
-        LOGGER.info("No bookings found for customer id={}", customerId);
-        return ResponseEntity.notFound().build();
+        LOGGER.info("{} Bookings found", bookings.size());
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    @PostMapping("/bookings/search")
-    public ResponseEntity<?> searchBookingByReferenceNumber(@RequestBody Integer referenceNumber) {
+    @PostMapping(value = "/bookings/search", params = "referenceNumber")
+    public ResponseEntity<?> searchBookingByReferenceNumber(@RequestParam(value = "referenceNumber", required = false) String referenceNumber) {
+        List<Booking> bookings = new ArrayList<>();
         Booking booking = _bookingService.getBookingByReferenceNumber(referenceNumber);
         if (booking != null) {
-            LOGGER.info("Booking found with reference number={}", booking.getReference_number());
-            return new ResponseEntity<>(booking, HttpStatus.OK);
+            bookings.add(booking);
         }
-        LOGGER.info("No booking found with reference number={}", referenceNumber);
-        return ResponseEntity.notFound().build();
+        LOGGER.info("{} Bookings found", bookings.size());
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
 }
