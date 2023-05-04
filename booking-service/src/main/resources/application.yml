@@ -22,8 +22,12 @@ springdoc:
 customer:
   service:
     url: http://localhost:8201
+    username: admin
+    password: is_a_lie
 
 flight:
   service:
     url: http://localhost:8202
+    username: admin
+    password: is_a_lie
 
