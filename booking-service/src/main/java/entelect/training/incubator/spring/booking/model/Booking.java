@@ -15,7 +15,12 @@ public class Booking {
     public Booking(Integer customer_id, Integer flight_id) {
         this.customerId = customer_id;
         this.flightId = flight_id;
-        this.referenceNumber = String.format("%s%s%s", customer_id, flight_id, new Random().nextInt(10000));
+        generateReferenceNumber();
+    }
+
+    private void generateReferenceNumber(){
+        String acceptableChars = "ABCDEFGHJKMNPQRTUVWXYZ";
+        this.referenceNumber = String.format("%s-%s%s%s", this.customerId, this.flightId,acceptableChars.charAt(new Random().nextInt(acceptableChars.length())), System.currentTimeMillis());
     }
 
     @Id

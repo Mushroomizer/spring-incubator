@@ -4,6 +4,8 @@ package entelect.training.incubator.spring.booking.controller;
 import entelect.training.incubator.spring.booking.model.Booking;
 import entelect.training.incubator.spring.booking.model.CreateBookingRequest;
 import entelect.training.incubator.spring.booking.service.BookingService;
+import entelect.training.incubator.spring.booking.service.CustomerClientService;
+import entelect.training.incubator.spring.booking.service.FlightClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,18 +20,28 @@ public class BookingController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BookingController.class);
 
-    private static BookingService _bookingService;
+    private final BookingService _bookingService;
+    private final CustomerClientService _customerClientService;
+    private final FlightClientService _flightClientService;
 
-    public BookingController(BookingService bookingService) {
-
-        _bookingService = bookingService;
+    public BookingController(BookingService _bookingService, CustomerClientService _customerClientService, FlightClientService _flightClientService) {
+        this._bookingService = _bookingService;
+        this._customerClientService = _customerClientService;
+        this._flightClientService = _flightClientService;
     }
-
 
     @PostMapping("/bookings")
     public ResponseEntity<?> makeBooking(@RequestBody CreateBookingRequest request) {
-        // TODO: Check if customer exists
-        // TODO: Check if flight exists
+        if (!_customerClientService.isCustomerIdValid(request.customerId)) {
+            LOGGER.info("No customer found with id={}", request.customerId);
+            return new ResponseEntity<>("Invalid Customer id",HttpStatus.BAD_REQUEST);
+        }
+
+        if (!_flightClientService.isFlightIdValid(request.flightId)) {
+            LOGGER.info("No flight found with id={}", request.flightId);
+            return new ResponseEntity<>("Invalid Flight id",HttpStatus.BAD_REQUEST);
+        }
+
         Booking savedBooking = _bookingService.createBooking(new Booking(request.customerId, request.flightId));
         LOGGER.info("Booking created with reference number={}", savedBooking.getId());
         return new ResponseEntity<>(savedBooking, HttpStatus.OK);
@@ -38,12 +50,14 @@ public class BookingController {
     @GetMapping("/bookings/{id}")
     public ResponseEntity<?> getBookingById(@PathVariable Integer id) {
         Booking booking = _bookingService.getBookingById(id);
+
         if (booking != null) {
             LOGGER.info("Booking found with reference number={}", booking.getReferenceNumber());
             return new ResponseEntity<>(booking, HttpStatus.OK);
         }
+
         LOGGER.info("No booking found with id={}", id);
-        return ResponseEntity.notFound().build();
+        return new ResponseEntity<>("No booking found",HttpStatus.OK);
     }
 
     @PostMapping(value = "/bookings/search", params = "customerId")
@@ -57,9 +71,11 @@ public class BookingController {
     public ResponseEntity<?> searchBookingByReferenceNumber(@RequestParam(value = "referenceNumber", required = false) String referenceNumber) {
         List<Booking> bookings = new ArrayList<>();
         Booking booking = _bookingService.getBookingByReferenceNumber(referenceNumber);
+
         if (booking != null) {
             bookings.add(booking);
         }
+
         LOGGER.info("{} Bookings found", bookings.size());
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }

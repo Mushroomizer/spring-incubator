@@ -11,10 +11,19 @@ spring:
       ddl-auto: create
 
 server:
-  port: 8202
+  port: 8200
   error:
     include-message: always
 
 springdoc:
   swagger-ui:
     path: swagger
+
+customer:
+  service:
+    url: http://localhost:8201
+
+flight:
+  service:
+    url: http://localhost:8202
+

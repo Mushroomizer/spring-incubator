@@ -41,6 +41,12 @@
         </dependency>
     </dependencies>
 
+    <!-- Swagger dependencies -->
+    <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+    </dependency>
+
     <build>
         <plugins>
             <plugin>
