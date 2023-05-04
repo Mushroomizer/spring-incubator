@@ -38,5 +38,5 @@ flight:
 
 queue:
   service:
-    destination: notification
+    destination: notification.queue
 
