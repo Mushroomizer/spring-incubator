@@ -3,6 +3,8 @@ package entelect.training.incubator.spring.flight.controller;
 import entelect.training.incubator.spring.flight.model.Flight;
 import entelect.training.incubator.spring.flight.model.FlightsSearchRequest;
 import entelect.training.incubator.spring.flight.service.FlightsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("flights")
+@SecurityRequirement(name = "basicAuth")
 public class FlightsController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(FlightsController.class);
@@ -29,6 +32,7 @@ public class FlightsController {
     }
 
     @PostMapping
+    @Operation(summary = "Create flight")
     public ResponseEntity<?> createFlight(@RequestBody Flight flight) {
         LOGGER.info("Processing flight creation request for flight={}", flight);
 
@@ -39,6 +43,7 @@ public class FlightsController {
     }
 
     @GetMapping()
+    @Operation(summary = "Get all flights")
     public ResponseEntity<?> getFlights() {
         LOGGER.info("Fetching all flights");
         List<Flight> flights = this.flightsService.getFlights();
@@ -53,6 +58,7 @@ public class FlightsController {
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Get flight by id")
     public ResponseEntity<?> getFlightById(@PathVariable Integer id) {
         LOGGER.info("Processing flight search request for flight id={}", id);
         Flight flight = this.flightsService.getFlight(id);
@@ -67,6 +73,7 @@ public class FlightsController {
     }
 
     @PostMapping("/search")
+    @Operation(summary = "Search flights")
     public ResponseEntity<?> searchFlights(@RequestBody FlightsSearchRequest searchRequest) {
         LOGGER.info("Processing flight search request: {}", searchRequest);
 
@@ -82,6 +89,7 @@ public class FlightsController {
     }
 
     @GetMapping("/specials")
+    @Operation(summary = "Get flights that are on specials")
     public List<Flight> getFlightSpecials() {
         LOGGER.info("Processing flight specials request");
 

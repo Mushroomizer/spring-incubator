@@ -9,6 +9,8 @@ import entelect.training.incubator.spring.booking.service.BookingService;
 import entelect.training.incubator.spring.booking.service.CustomerClientService;
 import entelect.training.incubator.spring.booking.service.FlightClientService;
 import entelect.training.incubator.spring.booking.rewards.client.RewardsClient;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name = "basicAuth")
 public class BookingController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BookingController.class);
@@ -36,6 +39,7 @@ public class BookingController {
     }
 
     @PostMapping("/bookings")
+    @Operation(summary = "Make Booking")
     public ResponseEntity<?> makeBooking(@RequestBody CreateBookingRequest request) {
 
         Customer customer = _customerClientService.getCustomerById(request.customerId);
@@ -59,6 +63,7 @@ public class BookingController {
     }
 
     @GetMapping("/bookings/{id}")
+    @Operation(summary = "Get Booking by id")
     public ResponseEntity<?> getBookingById(@PathVariable Integer id) {
         Booking booking = _bookingService.getBookingById(id);
 
@@ -72,6 +77,7 @@ public class BookingController {
     }
 
     @PostMapping(value = "/bookings/search", params = "customerId")
+    @Operation(summary = "Search booking by customer id")
     public ResponseEntity<?> searchBookingByCustomerId(@RequestParam(value = "customerId", required = false) Integer customerId) {
         List<Booking> bookings = _bookingService.getBookingsByCustomerId(customerId);
         LOGGER.info("{} Bookings found", bookings.size());
@@ -79,6 +85,7 @@ public class BookingController {
     }
 
     @PostMapping(value = "/bookings/search", params = "referenceNumber")
+    @Operation(summary = "Search booking by reference number")
     public ResponseEntity<?> searchBookingByReferenceNumber(@RequestParam(value = "referenceNumber", required = false) String referenceNumber) {
         List<Booking> bookings = new ArrayList<>();
         Booking booking = _bookingService.getBookingByReferenceNumber(referenceNumber);

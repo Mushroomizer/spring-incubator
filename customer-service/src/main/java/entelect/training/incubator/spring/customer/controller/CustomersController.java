@@ -4,6 +4,8 @@ import entelect.training.incubator.spring.customer.model.Customer;
 import entelect.training.incubator.spring.customer.model.CustomerSearchRequest;
 import entelect.training.incubator.spring.customer.model.SearchType;
 import entelect.training.incubator.spring.customer.service.CustomersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("customers")
+@SecurityRequirement(name = "basicAuth")
 public class CustomersController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(CustomersController.class);
@@ -25,6 +28,7 @@ public class CustomersController {
     }
 
     @PostMapping
+    @Operation(summary = "Create customer")
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         LOGGER.info("Processing customer creation request for customer={}", customer);
 
@@ -35,6 +39,7 @@ public class CustomersController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all customers")
     public ResponseEntity<?> getCustomers() {
         LOGGER.info("Fetching all customers");
         List<Customer> customers = customersService.getCustomers();
@@ -49,6 +54,7 @@ public class CustomersController {
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Create customer by id")
     public ResponseEntity<?> getCustomerById(@PathVariable Integer id) {
         LOGGER.info("Processing customer search request for customer id={}", id);
         Customer customer = this.customersService.getCustomer(id);
@@ -63,6 +69,7 @@ public class CustomersController {
     }
 
     @PostMapping("/search")
+    @Operation(summary = "Search customer")
     public ResponseEntity<?> searchCustomers(@RequestBody CustomerSearchRequest searchRequest) {
         LOGGER.info("Processing customer search request for request {}", searchRequest);
 
