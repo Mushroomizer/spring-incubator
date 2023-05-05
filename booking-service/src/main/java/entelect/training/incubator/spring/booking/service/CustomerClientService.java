@@ -28,20 +28,4 @@ public class CustomerClientService {
         }
         return null;
     }
-
-    public boolean isCustomerIdValid(Integer customerId) {
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(serviceUsername, servicePassword));
-            Customer result = restTemplate.getForObject(String.format("%s/customers/%d", customerServiceUrl, customerId), Customer.class);
-            if (result == null || !result.getId().equals(customerId)) {
-                return false;
-            }
-            // No need for further checking here, since 404 will throw an exception
-        } catch (Exception e) {
-            System.out.println(e);
-            return false;
-        }
-        return true;
-    }
 }

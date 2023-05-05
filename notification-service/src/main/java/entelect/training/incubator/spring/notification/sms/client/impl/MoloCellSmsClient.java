@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MoloCellSmsClient implements SmsClient {
-    
     @Override
     public void sendSms(String phoneNumber, String message) {
         System.out.printf("Sending SMS, destination='%s', '%s'%n", phoneNumber, message);

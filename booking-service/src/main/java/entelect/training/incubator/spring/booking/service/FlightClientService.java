@@ -17,14 +17,12 @@ public class FlightClientService {
     @Value("${flight.service.password}")
     private String servicePassword;
 
-
     public Flight getFlightById(Integer flightId){
         try {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(serviceUsername, servicePassword
             ));
             return restTemplate.getForObject(String.format("%s/flights/%d", flightServiceUrl, flightId), Flight.class);
-            // No need for further checking here, since 404 will throw an exception
         } catch (Exception e) {
             e.printStackTrace();
         }
